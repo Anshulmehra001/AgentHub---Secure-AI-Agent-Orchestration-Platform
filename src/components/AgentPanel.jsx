@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -14,7 +14,10 @@ function AgentPanel() {
 
   // Mock user for demo mode
   const demoUser = {
-    sub: 'demo-user-123'
+    name: 'Aniket',
+    email: 'aniket@agenthub.com',
+    picture: 'https://ui-avatars.com/api/?name=Aniket&background=667eea&color=fff&bold=true&size=128',
+    sub: 'demo-user-aniket'
   };
 
   const currentUser = user || demoUser;
@@ -29,7 +32,7 @@ function AgentPanel() {
       const response = await axios.post('http://localhost:3001/api/agents/execute', {
         agentType: selectedAgent,
         task,
-        userId: user.sub,
+        userId: currentUser.sub,
         requiresStepUp: false
       });
 
@@ -52,13 +55,12 @@ function AgentPanel() {
   const authorizeAgent = async () => {
     try {
       const response = await axios.post('http://localhost:3001/api/agents/request-auth', {
-        userId: user.sub,
+        userId: currentUser.sub,
         service: selectedAgent,
         scopes: result.scopes,
         callbackUrl: window.location.origin + '/callback'
       });
 
-      // Open auth URL in new window
       window.open(response.data.authUrl, '_blank');
     } catch (error) {
       console.error('Authorization failed:', error);
@@ -70,6 +72,13 @@ function AgentPanel() {
       <header className="dashboard-header">
         <div className="header-content">
           <h1>🤖 AgentHub</h1>
+          <div className="user-info">
+            <img src={currentUser.picture} alt={currentUser.name} className="avatar" />
+            <span>{currentUser.name}</span>
+            <button onClick={() => window.location.href = '/'} className="btn-secondary">
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

@@ -83,16 +83,6 @@ function Dashboard() {
       </nav>
 
       <main className="dashboard-main">
-        {!user && (
-          <div className="demo-banner">
-            <span className="demo-icon">✨</span>
-            <div>
-              <strong>Demo Mode Active</strong>
-              <p>You're exploring AgentHub in demo mode. All features are functional!</p>
-            </div>
-          </div>
-        )}
-        
         <section className="welcome-section">
           <h2>Welcome back, {currentUser.name}! 👋</h2>
           <p>

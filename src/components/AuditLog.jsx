@@ -4,6 +4,17 @@ import { Link } from 'react-router-dom';
 
 function AuditLog() {
   const { user } = useAuth0();
+  
+  // Mock user for demo mode
+  const demoUser = {
+    name: 'Aniket',
+    email: 'aniket@agenthub.com',
+    picture: 'https://ui-avatars.com/api/?name=Aniket&background=667eea&color=fff&bold=true&size=128',
+    sub: 'demo-user-aniket'
+  };
+
+  const currentUser = user || demoUser;
+  
   const [logs, setLogs] = useState([
     {
       id: 1,
@@ -42,6 +53,13 @@ function AuditLog() {
       <header className="dashboard-header">
         <div className="header-content">
           <h1>🤖 AgentHub</h1>
+          <div className="user-info">
+            <img src={currentUser.picture} alt={currentUser.name} className="avatar" />
+            <span>{currentUser.name}</span>
+            <button onClick={() => window.location.href = '/'} className="btn-secondary">
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

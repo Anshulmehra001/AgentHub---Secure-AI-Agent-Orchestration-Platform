@@ -8,6 +8,16 @@ function PermissionsManager() {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Mock user for demo mode
+  const demoUser = {
+    name: 'Aniket',
+    email: 'aniket@agenthub.com',
+    picture: 'https://ui-avatars.com/api/?name=Aniket&background=667eea&color=fff&bold=true&size=128',
+    sub: 'demo-user-aniket'
+  };
+
+  const currentUser = user || demoUser;
+
   useEffect(() => {
     loadTokens();
   }, []);
@@ -15,7 +25,7 @@ function PermissionsManager() {
   const loadTokens = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/token-vault/list/${user.sub}`
+        `http://localhost:3001/api/token-vault/list/${currentUser.sub}`
       );
       setTokens(response.data.tokens || []);
     } catch (error) {
@@ -31,7 +41,7 @@ function PermissionsManager() {
 
     try {
       await axios.delete(
-        `http://localhost:3001/api/token-vault/revoke/${user.sub}/${service}`
+        `http://localhost:3001/api/token-vault/revoke/${currentUser.sub}/${service}`
       );
       await loadTokens();
     } catch (error) {
@@ -44,6 +54,13 @@ function PermissionsManager() {
       <header className="dashboard-header">
         <div className="header-content">
           <h1>🤖 AgentHub</h1>
+          <div className="user-info">
+            <img src={currentUser.picture} alt={currentUser.name} className="avatar" />
+            <span>{currentUser.name}</span>
+            <button onClick={() => window.location.href = '/'} className="btn-secondary">
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

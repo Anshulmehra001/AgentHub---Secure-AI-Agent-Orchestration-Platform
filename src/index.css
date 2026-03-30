@@ -157,17 +157,28 @@
 .permissions-section h2 {
   color: #333;
   margin-bottom: 0.5rem;
+  background: transparent;
+  padding: 0;
 }
 
 .permissions-section > p {
   color: #666;
   margin-bottom: 2rem;
+  background: transparent;
+  padding: 0;
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
   color: #999;
+  background: transparent;
+}
+
+.empty-state p {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1rem;
 }
 
 .permissions-list {
