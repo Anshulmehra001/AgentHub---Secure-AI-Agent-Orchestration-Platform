@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AgentHub Video Graphics Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            padding: 60px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .graphics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .graphic-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .graphic-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .graphic-canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #f5f5f5;
+        }
+
+        .graphic-info {
+            padding: 20px;
+        }
+        
+        .graphic-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .graphic-info p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .download-all {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .download-all-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 700;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .download-all-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AgentHub Video Graphics</h1>
+            <p>Professional PNG graphics for your hackathon video presentation</p>
+        </header>
+
+        <div id="loading" class="loading">
+            ⚙️ Generating graphics...
+        </div>
+
+        <div id="graphics-container" class="graphics-grid" style="display: none;"></div>
+
+        <div class="download-all" style="display: none;" id="download-all-section">
+            <button class="download-all-btn" onclick="downloadAllPNGs()">
+                📥 Download All PNGs as ZIP
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        const graphics = [
+            {
+                id: 'title-card',
+                title: '1. Title Card',
+                description: 'Opening slide with AgentHub branding and logo',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    // Gradient background
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#667eea');
+                    gradient.addColorStop(1, '#764ba2');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+
+                    
+                    // Robot icon
+                    ctx.font = 'bold 200px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🤖', w/2, h/2 - 100);
+                    
+                    // Title
+                    ctx.font = 'bold 120px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText('AgentHub', w/2, h/2 + 100);
+                    
+                    // Subtitle
+                    ctx.font = '50px Arial';
+                    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                    ctx.fillText('Secure AI Agent Orchestration', w/2, h/2 + 180);
+                    
+                    // Auth0 badge
+                    ctx.font = '35px Arial';
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                    ctx.fillText('Powered by Auth0 Token Vault', w/2, h/2 + 250);
+                }
+            },
+            {
+                id: 'problem-diagram',
+                title: '2. The Problem',
+                description: 'Traditional approach showing security vulnerabilities',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    // White background
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Title
+                    ctx.font = 'bold 80px Arial';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('The Problem with Traditional AI Agents', w/2, 150);
+
+                    
+                    // Robot in center
+                    ctx.font = '150px Arial';
+                    ctx.fillText('🤖', w/2, h/2);
+                    
+                    // Passwords scattered around
+                    const passwords = ['🔑', '🔐', '🗝️', '🔓'];
+                    const positions = [
+                        [w/2 - 300, h/2 - 200],
+                        [w/2 + 300, h/2 - 200],
+                        [w/2 - 300, h/2 + 200],
+                        [w/2 + 300, h/2 + 200]
+                    ];
+                    
+                    ctx.font = '100px Arial';
+                    passwords.forEach((pwd, i) => {
+                        ctx.fillText(pwd, positions[i][0], positions[i][1]);
+                    });
+                    
+                    // Red X marks
+                    ctx.font = 'bold 120px Arial';
+                    ctx.fillStyle = '#f44336';
+                    positions.forEach(pos => {
+                        ctx.fillText('❌', pos[0], pos[1]);
+                    });
+                    
+                    // Warning text
+                    ctx.font = 'bold 50px Arial';
+                    ctx.fillStyle = '#f44336';
+                    ctx.fillText('⚠️ Credentials Exposed', w/2, h - 150);
+                    ctx.font = '40px Arial';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('No Control • No Audit Trail • Security Risk', w/2, h - 80);
+                }
+            },
+
+            {
+                id: 'token-vault',
+                title: '3. Token Vault Solution',
+                description: 'How Auth0 Token Vault secures credentials',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    // Gradient background
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#e8f5e9');
+                    gradient.addColorStop(1, '#c8e6c9');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Title
+                    ctx.font = 'bold 80px Arial';
+                    ctx.fillStyle = '#2e7d32';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Auth0 Token Vault Solution', w/2, 150);
+                    
+                    // Vault in center
+                    ctx.font = '200px Arial';
+                    ctx.fillText('🔐', w/2, h/2);
+                    
+                    // Tokens flowing out
+                    ctx.font = '80px Arial';
+                    ctx.fillText('🎫', w/2 - 350, h/2 - 100);
+                    ctx.fillText('🎫', w/2 + 350, h/2 - 100);
+                    ctx.fillText('🎫', w/2, h/2 + 250);
+                    
+                    // Arrows
+                    ctx.strokeStyle = '#4caf50';
+                    ctx.lineWidth = 8;
+                    ctx.beginPath();
+                    ctx.moveTo(w/2 - 100, h/2 - 50);
+                    ctx.lineTo(w/2 - 280, h/2 - 80);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(w/2 + 100, h/2 - 50);
+                    ctx.lineTo(w/2 + 280, h/2 - 80);
+                    ctx.stroke();
+
+                    
+                    // Benefits
+                    ctx.font = 'bold 45px Arial';
+                    ctx.fillStyle = '#2e7d32';
+                    const benefits = [
+                        '✓ Zero Credential Exposure',
+                        '✓ Temporary Access Tokens',
+                        '✓ Instant Revocation'
+                    ];
+                    benefits.forEach((benefit, i) => {
+                        ctx.fillText(benefit, w/2, h - 200 + (i * 60));
+                    });
+                }
+            },
+            {
+                id: 'architecture',
+                title: '4. Architecture Diagram',
+                description: 'System architecture and data flow',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    ctx.fillStyle = '#f5f7fa';
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Title
+                    ctx.font = 'bold 70px Arial';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('AgentHub Architecture', w/2, 120);
+                    
+                    // User
+                    ctx.font = '100px Arial';
+                    ctx.fillText('👤', w/2, 300);
+                    ctx.font = '35px Arial';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('User', w/2, 350);
+                    
+                    // Arrow down
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.moveTo(w/2, 360);
+                    ctx.lineTo(w/2, 430);
+                    ctx.stroke();
+
+                    
+                    // Token Vault
+                    ctx.fillStyle = '#667eea';
+                    ctx.fillRect(w/2 - 200, 450, 400, 120);
+                    ctx.font = 'bold 45px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText('🔐 Token Vault', w/2, 520);
+                    
+                    // Arrow down
+                    ctx.strokeStyle = '#667eea';
+                    ctx.beginPath();
+                    ctx.moveTo(w/2, 580);
+                    ctx.lineTo(w/2, 650);
+                    ctx.stroke();
+                    
+                    // Agents
+                    const agents = [
+                        { icon: '🐙', name: 'GitHub', x: w/2 - 400 },
+                        { icon: '💬', name: 'Slack', x: w/2 },
+                        { icon: '📅', name: 'Calendar', x: w/2 + 400 }
+                    ];
+                    
+                    ctx.font = '80px Arial';
+                    agents.forEach(agent => {
+                        ctx.fillText(agent.icon, agent.x, 750);
+                        ctx.font = '35px Arial';
+                        ctx.fillStyle = '#666';
+                        ctx.fillText(agent.name + ' Agent', agent.x, 810);
+                        ctx.font = '80px Arial';
+                    });
+                }
+            },
+            {
+                id: 'features',
+                title: '5. Key Features',
+                description: 'Security features checklist',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#667eea');
+                    gradient.addColorStop(1, '#764ba2');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+
+                    
+                    ctx.font = 'bold 90px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Key Security Features', w/2, 150);
+                    
+                    const features = [
+                        '✓ Zero Credential Exposure',
+                        '✓ Automatic Token Refresh',
+                        '✓ Step-Up Authentication',
+                        '✓ Granular Permission Scopes',
+                        '✓ Instant Access Revocation',
+                        '✓ Complete Audit Trail'
+                    ];
+                    
+                    ctx.font = 'bold 55px Arial';
+                    ctx.textAlign = 'left';
+                    features.forEach((feature, i) => {
+                        const y = 300 + (i * 110);
+                        ctx.fillText(feature, 300, y);
+                    });
+                }
+            },
+            {
+                id: 'tech-stack',
+                title: '6. Tech Stack',
+                description: 'Technologies used in AgentHub',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    ctx.font = 'bold 80px Arial';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Built With', w/2, 150);
+                    
+                    const stack = [
+                        { name: 'React + Vite', icon: '⚛️', color: '#61dafb' },
+                        { name: 'Node.js + Express', icon: '🟢', color: '#68a063' },
+                        { name: 'Auth0 Token Vault', icon: '🔐', color: '#eb5424' }
+                    ];
+
+                    
+                    stack.forEach((tech, i) => {
+                        const y = 350 + (i * 200);
+                        
+                        // Icon
+                        ctx.font = '120px Arial';
+                        ctx.fillText(tech.icon, w/2, y);
+                        
+                        // Name
+                        ctx.font = 'bold 50px Arial';
+                        ctx.fillStyle = tech.color;
+                        ctx.fillText(tech.name, w/2, y + 80);
+                        
+                        ctx.fillStyle = '#333';
+                    });
+                }
+            },
+            {
+                id: 'closing',
+                title: '7. Closing Card',
+                description: 'Final call-to-action slide',
+                width: 1920,
+                height: 1080,
+                render: (ctx, w, h) => {
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#667eea');
+                    gradient.addColorStop(1, '#764ba2');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Main title
+                    ctx.font = 'bold 120px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🤖 AgentHub', w/2, h/2 - 150);
+                    
+                    // Subtitle
+                    ctx.font = '55px Arial';
+                    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                    ctx.fillText('Secure AI Agent Orchestration', w/2, h/2 - 40);
+                    
+                    // Divider line
+                    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(w/2 - 400, h/2 + 40);
+                    ctx.lineTo(w/2 + 400, h/2 + 40);
+                    ctx.stroke();
+                    
+                    // GitHub section
+                    ctx.font = 'bold 65px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText('View on GitHub', w/2, h/2 + 140);
+                    
+                    // GitHub username/repo hint
+                    ctx.font = '45px Arial';
+                    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                    ctx.fillText('github.com/Anshulmehra001/AgentHub', w/2, h/2 + 210);
+                    
+                    // Bottom tagline
+                    ctx.font = 'italic 40px Arial';
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                    ctx.fillText('Built for Auth0 "Authorized to Act" Hackathon', w/2, h/2 + 320);
+                }
+            }
+        ];
+
+
+        // Generate all graphics
+        function generateGraphics() {
+            const container = document.getElementById('graphics-container');
+            const loading = document.getElementById('loading');
+            
+            setTimeout(() => {
+                graphics.forEach(graphic => {
+                    // Create card first
+                    const card = document.createElement('div');
+                    card.className = 'graphic-card';
+                    
+                    // Create canvas
+                    const canvas = document.createElement('canvas');
+                    canvas.width = graphic.width;
+                    canvas.height = graphic.height;
+                    canvas.className = 'graphic-canvas';
+                    canvas.id = graphic.id;
+                    
+                    // Create info div
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'graphic-info';
+                    infoDiv.innerHTML = `
+                        <h3>${graphic.title}</h3>
+                        <p>${graphic.description}</p>
+                        <button class="download-btn" onclick="downloadPNG('${graphic.id}', '${graphic.title}')">
+                            📥 Download PNG
+                        </button>
+                    `;
+                    
+                    // Append canvas and info to card
+                    card.appendChild(canvas);
+                    card.appendChild(infoDiv);
+                    
+                    // Append card to container
+                    container.appendChild(card);
+                    
+                    // Now render on the canvas (after it's in the DOM)
+                    const ctx = canvas.getContext('2d');
+                    graphic.render(ctx, graphic.width, graphic.height);
+                });
+                
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+                document.getElementById('download-all-section').style.display = 'block';
+            }, 500);
+        }
+
+        // Download single PNG
+        function downloadPNG(canvasId, title) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = `agenthub-${canvasId}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+
+        // Download all as ZIP
+        async function downloadAllPNGs() {
+            const zip = new JSZip();
+            const folder = zip.folder('agenthub-graphics');
+            
+            graphics.forEach(graphic => {
+                const canvas = document.getElementById(graphic.id);
+                const dataUrl = canvas.toDataURL('image/png');
+                const base64Data = dataUrl.split(',')[1];
+                folder.file(`${graphic.id}.png`, base64Data, {base64: true});
+            });
+            
+            const content = await zip.generateAsync({type: 'blob'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'agenthub-video-graphics.zip';
+            link.click();
+        }
+
+        // Generate on load
+        window.onload = generateGraphics;
+    </script>
+</body>
+</html>
