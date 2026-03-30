@@ -4,9 +4,7 @@
 
 ## 🎥 Demo Video
 
-**Watch the 3-minute demo:** [https://youtu.be/YOUR_VIDEO_ID_HERE](https://youtu.be/YOUR_VIDEO_ID_HERE)
-
-*(Update this link after uploading your video to YouTube/Vimeo)*
+**Watch the 3-minute demo:** [https://youtu.be/26MjMG2flcQ](https://youtu.be/26MjMG2flcQ)
 
 ---
 
@@ -156,10 +154,10 @@ MIT
 ## 🔗 Links
 
 - **Repository**: https://github.com/Anshulmehra001/AgentHub---Secure-AI-Agent-Orchestration-Platform
-- **Demo Video**: [Add your YouTube/Vimeo link]
+- **Demo Video**: https://youtu.be/26MjMG2flcQ
 - **Auth0 for AI Agents**: https://auth0.com/docs/ai-agents
 - **Hackathon**: https://authorizedtoact.devpost.com/
 
 ---
 
-**Built with ❤️ for the Auth0 "Authorized to Act" Hackathon**
+**Built for the Auth0 "Authorized to Act" Hackathon**
