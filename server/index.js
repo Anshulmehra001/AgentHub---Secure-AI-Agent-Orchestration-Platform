@@ -26,6 +26,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 AgentHub server running on port ${PORT}`);
-});
+// Only start server if not in Vercel serverless environment
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`🚀 AgentHub server running on port ${PORT}`);
+  });
+}
+
+export default app;
